@@ -2,16 +2,13 @@
 
 import tornado.ioloop
 import tornado.web
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write("Hello, world")
+import server.routes as rt
 
 application = tornado.web.Application([
-    (r"/", MainHandler),
+    (r"/", rt.MainHandler),
 ])
 
 if __name__ == "__main__":
     application.listen(8888)
-    print("listening on port 8888")
+    print("Listening on port 8888")
     tornado.ioloop.IOLoop.instance().start()
