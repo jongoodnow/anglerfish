@@ -22,11 +22,19 @@ if __name__ == "__main__":
     img = ImageTk.PhotoImage(image)
     canvas.create_image(0,0,image=img, anchor="nw")
 
-    def printcoords(event):
-        #outputting x and y coords to console
-        print (event.x,event.y)
-    #mouseclick event
-    canvas.bind("<Button 1>", printcoords)
+    board_corners = []
+    corners_counted = 0
+
+    def get_corner_coords(event):
+        global board_corners, corners_counted
+        board_corners.append((event.x,event.y))
+        canvas.create_oval(event.x - 5, event.y - 5, event.x + 5, event.y + 5, fill='#F00', outline='#F00')
+        corners_counted += 1
+        if corners_counted == 4:
+            root.quit()
+            print board_corners
+    
+    canvas.bind("<Button 1>", get_corner_coords)
     root.mainloop()
 
 def doloop():
