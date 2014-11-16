@@ -1,7 +1,15 @@
 [
 	{
+		"id": "xc0oflp",
 		"name": "Troy Picture",
 		"type": "picture",
-		"href": "./static/troy.png"
+		"src": "/static/troy.png"
+	},
+	{
+		"id": "rp5v1go",
+		"name": "Question from Keaton",
+		"message": "How does this Kinect thing work?",
+		"sender": "Keaton",
+		"type": "question"
 	}
 ]

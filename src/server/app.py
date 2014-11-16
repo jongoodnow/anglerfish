@@ -12,8 +12,11 @@ application = tornado.web.Application([
     (r"/", rt.MainHandler),
     (r'/stack', rt.StackHandler),
     (r'/push', rt.PushToScreen),
+    (r'/update', rt.UpdateVar),
     (r'/socket', rt.ProjectorWebSocket),
     (r"/render/(.*)", tornado.web.StaticFileHandler, {"path": "../render"}),
+    (r"/control/(.*)", tornado.web.StaticFileHandler, {"path": "../control-app"}),
+    (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
 ])
 
 if __name__ == "__main__":
