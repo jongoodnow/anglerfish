@@ -50,6 +50,7 @@ def get_bg_depth():
     mean = mtx.mean(0)
     middle_coords = (int(mean.item((0, 0))), int(mean.item((0, 1))))
     corners_arr = np.array(corners)
+    global lower_bound, upper_bound
     lower_bound = np.amin(corners_arr, axis=0)
     upper_bound = np.amax(corners_arr, axis=0)
     global depth
@@ -58,16 +59,17 @@ def get_bg_depth():
     d3 = np.array(depth)
     d3 = np.array([y[lower_bound[0]:upper_bound[0]] 
         for y in d3[lower_bound[1]:upper_bound[1]]])
-    mean_vertical = d3.mean(axis=0)
-    return mean_vertical.mean(axis=0).astype(np.uint8)
+    mean_vertical = d3.min(axis=0)
+    return mean_vertical.min(axis=0).astype(np.int8)
 
 
 def yposition(x):
     d3 = np.array(depth)
-    column = d3[x].astype(np.uint8)
+    column = d3[x].astype(np.int8)
+    columnslice = column[lower_bound[0]:upper_bound[0]]
     ypos = None
     mindepth = 255
-    for pos, i in enumerate(column):
+    for pos, i in enumerate(columnslice):
         if i < mindepth:
             ypos = pos
             mindepth = i
@@ -81,16 +83,14 @@ def main():
     plt.ion()
     plt.show()
     corners_arr = np.array(corners)
-    lower_bound = np.amin(corners_arr, axis=0)
-    upper_bound = np.amax(corners_arr, axis=0)
     while True:
         (depth,_) = get_depth()
-        depth_array = np.array(depth).astype(np.uint8)
+        depth_array = np.array(depth).astype(np.int8)
         d3 = np.array([y[lower_bound[0]:upper_bound[0]] 
             for y in depth_array[lower_bound[1]:upper_bound[1]]])
-        d3 = d3
-        depths_per_x = d3.mean(axis=0) - bg_depth
-        depths_per_x = np.array([i if i < -3.5 else 0 for i in depths_per_x])
+        depths_per_x = d3.min(axis=0) - bg_depth
+        #np.savetxt('stuff.txt', depths_per_x, fmt='%d')
+        depths_per_x = np.array([i if i < -3 else 0 for i in depths_per_x])
         minimum = np.amin(depths_per_x)
         if minimum != 0:
             spanleft = None
@@ -102,34 +102,34 @@ def main():
                         spanleft = pos
                 if i < 0:
                     spanright = pos
-                if i == minimum:
-                    bodyx = pos
-            righty = yposition(spanright)
+            bodyx = spanright - spanleft
             bodyy = yposition(bodyx)
-            rightz = depth_array[spanright][righty]
             bodyz = depth_array[bodyx][bodyy]
-            pointz = None
-            if spanleft < bodyx - 29:
-                pointx = spanleft
-                pointy = yposition(spanleft)
-                pointz = depth_array[spanleft][pointy]
-            elif spanright > bodyx + 29:
-                pointx = spanright
-                pointy = yposition(spanright)
-                pointz = depth_array[spanright][pointy]
-            if pointz is not None and pointz < bodyz and pointy != bodyy and pointx != bodyx:
-                xzslope = (pointz - bodyz) / (pointx - bodyx)
-                yzslope = (pointz - bodyz) / (pointy - bodyy)
-                zdiff = bg_depth - bodyz
-                xdist = zdiff / xzslope
-                ydist = zdiff / yzslope
-                xcoord = (xdist + bodyx) / upper_bound[1]
-                ycoord = (ydist + bodyy) / upper_bound[0]
-                urllib2.urlopen(
-                    "http://129.161.90.185:8888/update?pointer=%f,%f" %(xcoord, ycoord)).read()
+            lefty = yposition(spanleft)
+            leftz = depth_array[spanleft][lefty]
+            righty = yposition(spanright)
+            rightz = depth_array[spanright][righty]
+            if leftz > rightz:
+                pointx, pointy, pointz = spanleft, lefty, leftz
+            else:
+                pointx, pointy, pointz = spanright, righty, rightz
+            #xzslope = (pointz - bodyz) / (pointx - bodyx)
+            #yzslope = (pointz - bodyz) / (pointy - bodyy)
+            #zdiff = bg_depth - bodyz
+            #xdist = zdiff / xzslope
+            #ydist = zdiff / yzslope
+            #xcoord = (xdist + bodyx) / upper_bound[1]
+            #ycoord = (ydist + bodyy) / upper_bound[0]
+            yrange = upper_bound[0] - lower_bound[0]
+            xxrange = upper_bound[1] - lower_bound[1]
+            urllib2.urlopen(
+                "http://129.161.90.185:8888/update?pointer=%f,%f" %(pointx / xxrange, pointy / yrange)).read()
+        else:
+            urllib2.urlopen(
+                "http://129.161.90.185:8888/update?pointer=0,0").read()
         plt.clf()
         plt.scatter(np.arange(depths_per_x.size), depths_per_x)
-        plt.ylim([-255, 0])
+        plt.ylim([-255, 255])
         plt.draw()
     
 
