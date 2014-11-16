@@ -3,6 +3,9 @@ import tornado.websocket
 import urlparse
 import json
 import uuid
+import StringIO
+import random
+import string
 from PIL import Image
 
 json_data = open('cards.json').read()
@@ -42,19 +45,29 @@ class UpdateVar(tornado.web.RequestHandler):
 class AddCard(tornado.web.RequestHandler):
 	def post(self):
 		imgId = ''
-		if (len(self.request.files) > 0):
-			imgId = uuid.uuid4()
+		if (self.request.files):
 			file_body = self.request.files['image'][0]['body']
-	    	img = Image.open(StringIO.StringIO(file_body))
-	    	img.save("./static/"+imgId, img.format)
+			img = Image.open(StringIO.StringIO(file_body))
+			imgId = "./static/"+str(uuid.uuid4())+"."+img.format
+			img.save(imgId, img.format)
+
+		message = self.get_argument("message")
+		if (self.get_argument("type") == "video"):
+			ytid = message.split('?v=')[1]
+			message = "<iframe width='400' height='300' src='//www.youtube.com/embed/"
+			message += ytid
+			message += "?autoplay=1' frameborder='0' allowfullscreen></iframe>"
 
 		newCard = {}
 		newCard["type"] = self.get_argument("type")
-		newCard["src"] = "./static/"+imgId
-		newCard["message"] = self.get_argument("message")
+		newCard["src"] = "." + imgId
+		newCard["name"] = self.get_argument("name")
+		newCard["message"] = message
 		newCard["sender"] = self.get_argument("sender")
-
+		newCard["id"] = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(7))
 		stack.append(newCard);
+
+		self.redirect("../contribute/index.html");
 
 # Communicates with the projector HTML5 screen
 class ProjectorWebSocket(tornado.websocket.WebSocketHandler):

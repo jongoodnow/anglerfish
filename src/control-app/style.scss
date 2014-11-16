@@ -12,7 +12,6 @@ html,body {
 	font-family: "Montserrat", sans-serif;
 	background-color: #eee;
 	width: 100%;
-	overflow: hidden;
 }
 
 header {
@@ -27,6 +26,7 @@ header {
 	top: 0px;
 	left: 0px;
 	right: 0px;
+	z-index: 100;
 }
 
 article {
@@ -44,11 +44,11 @@ article {
 	position: relative;
 
 	* {
-		float: left;
 		pointer-events: none;
 	}
 
 	img {
+		float: left;
 		max-height: 90px;
 		display: inline-block;
 		border: 1px solid #999;
@@ -66,5 +66,9 @@ article {
 		margin-top: 3px;
 		margin-left: 7px;
 		font-size: 10pt;
+	}
+
+	p:last-child {
+		padding-bottom: 10px;
 	}
 }

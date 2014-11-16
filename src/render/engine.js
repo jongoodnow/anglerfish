@@ -17,8 +17,10 @@
         return $(".time").css("display", "block");
       } else if (data.pointer) {
         point = data.pointer[0].split(',');
-        $("#pointerDot").css("right", "" + (parseFloat(point[0]) * window.innerWidth) + "px");
-        return $("#pointerDot").css("top", "" + (parseFloat(point[1]) * window.innerHeight) + "px");
+        point[0] = Math.max(Math.min(parseFloat(point[0]), 1), 0);
+        point[1] = Math.max(Math.min(parseFloat(point[1]), 1), 0);
+        $("#pointerDot").css("left", "" + (point[0] * window.innerWidth) + "px");
+        return $("#pointerDot").css("top", "" + (point[1] * window.innerHeight) + "px");
       } else {
         return addCard(data.row, data.velocity, data.angle);
       }

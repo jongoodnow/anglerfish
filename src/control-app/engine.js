@@ -43,14 +43,14 @@
     if (rowData.type === "picture") {
       rowDiv.append($("<img src=" + rowData.src + "/>"));
     }
-    rowDiv.append($("<h3>" + rowData.name + "</h3>"));
+    rowDiv.append($("<h3>" + rowData.name + "<br/></h3>"));
     if (rowData.message) {
       rowDiv.append($("<p>" + rowData.message + "</p>"));
     }
     if (rowData.sender) {
       rowDiv.append($("<p>-" + rowData.sender + "</p>"));
     }
-    return container.append(rowDiv);
+    return container.prepend(rowDiv);
   };
 
   escapeVelocity = 0.25;

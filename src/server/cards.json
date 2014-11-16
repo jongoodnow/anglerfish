@@ -2,18 +2,21 @@
 	{
 		"id": "xc0oflp",
 		"name": "Welcome to Troy",
+		"message": "Yep",
 		"type": "picture",
 		"src": "/static/troy.png"
 	},
 	{
 		"id": "xc0of5lp",
 		"name": "Mm, Pasta",
+		"message": "It was pretty okay",
 		"type": "picture",
 		"src": "/static/dinner.jpg"
 	},
 	{
 		"id": "xc0ofl3",
 		"name": "Up all Night",
+		"message": "30 hours or so",
 		"type": "picture",
 		"src": "/static/hack.jpg"
 	},

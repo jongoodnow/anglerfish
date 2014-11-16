@@ -29,7 +29,7 @@ createRow = (rowData, container = $("article")) ->
 	if rowData.type == "picture"
 		rowDiv.append $ "<img src=#{rowData.src}/>"
 
-	rowDiv.append $ "<h3>#{rowData.name}</h3>"
+	rowDiv.append $ "<h3>#{rowData.name}<br/></h3>"
 
 	if rowData.message
 		rowDiv.append $ "<p>#{rowData.message}</p>"
@@ -37,7 +37,7 @@ createRow = (rowData, container = $("article")) ->
 	if rowData.sender
 		rowDiv.append $ "<p>-#{rowData.sender}</p>"
 
-	container.append rowDiv
+	container.prepend rowDiv
 
 # Gesture control
 escapeVelocity = 0.25
