@@ -3,7 +3,6 @@
 import tornado.ioloop
 import tornado.web
 import routes as rt
-import projector as ws
 
 # APPLICATION GLOBALS
 global ProjSocket
@@ -13,7 +12,7 @@ application = tornado.web.Application([
     (r"/", rt.MainHandler),
     (r'/stack', rt.StackHandler),
     (r'/push', rt.PushToScreen),
-    (r'/socket', ws.ProjectorWebSocket),
+    (r'/socket', rt.ProjectorWebSocket),
     (r"/render/(.*)", tornado.web.StaticFileHandler, {"path": "../render"}),
 ])
 

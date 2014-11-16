@@ -1,5 +1,5 @@
 import tornado.web
-import tornado.websocket
+import tornado.
 
 # Communicates with the projector HTML5 screen
 class ProjectorWebSocket(tornado.websocket.WebSocketHandler):
