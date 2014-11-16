@@ -2,19 +2,20 @@
 <html>
 <head>
 	<title>Jon and Keaton present: anglerfish</title>
-	<style type="text/css">
-		* {
-			margin: 0;
-			padding: 0;
-		}
-		html,body {
-			background-color: black;
-		}
-	</style>
+	<link href='http://fonts.googleapis.com/css?family=Raleway:300,100,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="./style.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="./jquery.transit.min.js"></script>
 	<script src="./engine.js"></script>
 </head>
 <body>
-	
+	<div class="time"></div>
+
+	<!-- Card templates -->
+	<div class="template" id="card-template">
+		<div class="card $type" data-id="$id">$content</div>
+	</div>
+	<div class="template" id="content-picture"><img src="$src"></div>
+
 </body>
 </html>

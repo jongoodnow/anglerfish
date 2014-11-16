@@ -1,5 +1,5 @@
 (function() {
-  var accX, accY, createRow, escapeVelocity, globalData, loadStack, minDist, sendCard, setupHandlers;
+  var accX, accY, beta, createRow, escapeVelocity, globalData, initialBeta, loadStack, minDist, sendCard, setupHandlers;
 
   $(function() {
     setInterval(loadStack, 1000);
@@ -108,7 +108,7 @@
               row = r;
             }
           }
-          sendCard(row, velocity, lastX > startX);
+          sendCard(row, (lastX - startX) / deltaT, lastX > startX);
           return target.animate({
             height: "0px"
           }, 200, function() {
@@ -132,15 +132,26 @@
     return accY = event.accelerationIncludingGravity.y;
   };
 
+  initialBeta = void 0;
+
+  beta = 0;
+
+  window.addEventListener('deviceorientation', function(event) {
+    if (initialBeta === void 0) {
+      initialBeta = event.gamma + 180;
+    }
+    return beta = event.gamma + 180;
+  });
+
   sendCard = function(card, velocity, isRight) {
-    var offset, postData, pureAngle;
+    var postData, pureAngle, reverse;
     postData = {};
     postData['row'] = card;
-    postData['velocity'] = velocity;
+    reverse = Math.abs(initialBeta - beta) < 90 || Math.abs(initialBeta + 360 - beta) < 90;
+    postData['velocity'] = reverse ? velocity : -velocity;
     pureAngle = Math.atan2(accX, accY);
-    offset = Math.PI / 4;
-    postData['angle'] = pureAngle + (isRight ? offset : -offset);
-    return $.post("../push", postData, function(data) {
+    postData['angle'] = -pureAngle;
+    return $.post("../push", JSON.stringify(postData), function(data) {
       return console.log(data);
     });
   };

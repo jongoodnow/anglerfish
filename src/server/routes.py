@@ -1,5 +1,6 @@
 import tornado.web
 import tornado.websocket
+import urlparse
 import json
 
 json_data = open('cards.json').read()
@@ -18,10 +19,10 @@ class StackHandler(tornado.web.RequestHandler):
 
 class PushToScreen(tornado.web.RequestHandler):
 	def post(self):
-		print self.request.body
 		if ProjSocket:
-			self.request.body['type'] = 'push'
-			ProjSocket.write_message(json.dumps(self.request.body))
+			body = json.loads(urlparse.unquote(self.request.body))
+			body['type'] = 'push'
+			ProjSocket.write_message(json.dumps(body))
 			self.write("SUCCESS")
 		else:
 			self.write("NO SOCKET")
@@ -44,7 +45,7 @@ class ProjectorWebSocket(tornado.websocket.WebSocketHandler):
         print "Opened socket to Projector"
 
     def on_message(self, message):
-        self.write_message(u"You said: " + message)
+        self.write_message(u'{"connected": true}')
 
     def on_close(self):
         print "WebSocket closed"

@@ -6,6 +6,24 @@
 		"src": "/static/troy.png"
 	},
 	{
+		"id": "xc0of5lp",
+		"name": "Troy Picture",
+		"type": "picture",
+		"src": "/static/troy.png"
+	},
+	{
+		"id": "xc0ofl3",
+		"name": "Troy Picture",
+		"type": "picture",
+		"src": "/static/troy.png"
+	},
+	{
+		"id": "xc02flp",
+		"name": "Troy Picture",
+		"type": "picture",
+		"src": "/static/troy.png"
+	},
+	{
 		"id": "rp5v1go",
 		"name": "Question from Keaton",
 		"message": "How does this Kinect thing work?",

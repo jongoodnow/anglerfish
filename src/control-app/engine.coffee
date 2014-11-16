@@ -89,29 +89,36 @@ setupHandlers = () ->
 				# On complete
 				rowId = target.attr "data-stack-id"
 				row = r for r in globalData when r.id == rowId
-				sendCard(row, velocity, lastX > startX)
+				sendCard(row, (lastX - startX)/deltaT, lastX > startX)
 				target.animate {height: "0px"}, 200, () ->
 					target.remove()
 
 		else
 			target.animate {left: "0px"}, 200
 
-# Accelerometer control
+# Device sensor data
 accY = 0
 accX = 0
 window.ondevicemotion = (event) ->
 	accX = event.accelerationIncludingGravity.x
 	accY = event.accelerationIncludingGravity.y
 
+initialBeta = undefined # Assume it's initially pointed away from the screen
+beta = 0
+window.addEventListener 'deviceorientation', (event) ->
+	if initialBeta is undefined then initialBeta = event.gamma + 180
+	beta = event.gamma + 180
+
 # API back to the server
 sendCard = (card, velocity, isRight) ->
 	postData = {}
 	postData['row'] = card
-	postData['velocity'] = velocity
+
+	reverse = Math.abs(initialBeta - beta) < 90 or Math.abs(initialBeta+360 - beta) < 90
+	postData['velocity'] = if reverse then velocity else -velocity
 
 	pureAngle = Math.atan2(accX, accY)
-	offset = Math.PI / 4
-	postData['angle'] = pureAngle + (if isRight then offset else -offset)
+	postData['angle'] = -pureAngle
 
-	$.post "../push", postData, (data)->
+	$.post "../push", JSON.stringify(postData), (data)->
 		console.log data

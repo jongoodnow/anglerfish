@@ -1,0 +1,36 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,body {
+	background-color: black;
+	font-family: "Raleway";
+}
+
+.time {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	color: #9aa;
+	font-weight: lighter;
+	font-size: 40pt;
+	display: none;
+}
+
+.template {display: none;}
+
+.card {
+	opacity: 0;
+	display: inline-block;
+	position: absolute;
+	background-color: white;
+	padding: 3px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.card * {
+	max-height: 400px;
+}
