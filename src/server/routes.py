@@ -19,10 +19,10 @@ class StackHandler(tornado.web.RequestHandler):
 class PushToScreen(tornado.web.RequestHandler):
 	def get(self):
 		if ProjSocket:
-			data = {}
-			data['message'] = self.get_query_argument('message')
-			print data
-			ProjSocket.write_message(json.dumps(data))
+			#data = {}
+			#data['message'] = self.get_query_argument('message')
+			print self.request.arguments
+			ProjSocket.write_message(json.dumps(self.request.arguments))
 			self.write("SUCCESS")
 		else:
 			self.write("NO SOCKET")
