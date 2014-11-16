@@ -119,7 +119,7 @@ sendCard = (card, velocity, isRight) ->
 	postData['velocity'] = if reverse then velocity else -velocity
 
 	pureAngle = Math.atan2(accX, accY)
-	postData['angle'] = -pureAngle
+	postData['angle'] = pureAngle
 
 	$.post "../push", JSON.stringify(postData), (data)->
 		console.log data

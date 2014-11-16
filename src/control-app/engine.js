@@ -151,7 +151,7 @@
     reverse = false;
     postData['velocity'] = reverse ? velocity : -velocity;
     pureAngle = Math.atan2(accX, accY);
-    postData['angle'] = -pureAngle;
+    postData['angle'] = pureAngle;
     return $.post("../push", JSON.stringify(postData), function(data) {
       return console.log(data);
     });
