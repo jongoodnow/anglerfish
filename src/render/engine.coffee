@@ -27,7 +27,12 @@ $ ()->
 				pos = data.position[0].split(',')
 				personX = (parseFloat(pos[0]) + parseFloat(pos[1]) + parseFloat(pos[2])) /3
 				personWidth = parseFloat(pos[2]) - parseFloat(pos[0])
+
 				if personWidth > 0.66 then clearAllCards()
+				if Math.max(Math.abs(parseFloat(pos[0]) - parseFloat(pos[1])), Math.abs(parseFloat(pos[2]) - parseFloat(pos[1]))) > 0.2
+					$("#pointerDot").css("display", "block")
+				else
+					$("#pointerDot").css("display", "none")
 
 		else
 			addCard(data.row, data.velocity, data.angle)

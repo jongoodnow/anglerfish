@@ -115,7 +115,7 @@ sendCard = (card, velocity, isRight) ->
 	postData = {}
 	postData['row'] = card
 
-	reverse = Math.abs(initialBeta - beta) < 90 or Math.abs(initialBeta+360 - beta) < 90
+	reverse = false; #Math.abs(initialBeta - beta) < 90 or Math.abs(initialBeta+360 - beta) < 90
 	postData['velocity'] = if reverse then velocity else -velocity
 
 	pureAngle = Math.atan2(accX, accY)

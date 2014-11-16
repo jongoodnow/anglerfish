@@ -30,7 +30,12 @@
           personX = (parseFloat(pos[0]) + parseFloat(pos[1]) + parseFloat(pos[2])) / 3;
           personWidth = parseFloat(pos[2]) - parseFloat(pos[0]);
           if (personWidth > 0.66) {
-            return clearAllCards();
+            clearAllCards();
+          }
+          if (Math.max(Math.abs(parseFloat(pos[0]) - parseFloat(pos[1])), Math.abs(parseFloat(pos[2]) - parseFloat(pos[1]))) > 0.2) {
+            return $("#pointerDot").css("display", "block");
+          } else {
+            return $("#pointerDot").css("display", "none");
           }
         }
       } else {

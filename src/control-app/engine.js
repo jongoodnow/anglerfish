@@ -148,7 +148,7 @@
     var postData, pureAngle, reverse;
     postData = {};
     postData['row'] = card;
-    reverse = Math.abs(initialBeta - beta) < 90 || Math.abs(initialBeta + 360 - beta) < 90;
+    reverse = false;
     postData['velocity'] = reverse ? velocity : -velocity;
     pureAngle = Math.atan2(accX, accY);
     postData['angle'] = -pureAngle;
