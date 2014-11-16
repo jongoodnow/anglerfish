@@ -1,5 +1,7 @@
 # App State
 cards = {}
+personX = 0.5
+personWidth = 0
 
 # Start
 $ ()->
@@ -15,10 +17,18 @@ $ ()->
 			$(".time").css("display","block")
 		else if data.pointer
 			point = data.pointer[0].split(',')
+
 			point[0] = Math.max(Math.min(parseFloat(point[0]), 1), 0)
 			point[1] = Math.max(Math.min(parseFloat(point[1]), 1), 0)
 			$("#pointerDot").css("left", "#{point[0] * window.innerWidth}px")
 			$("#pointerDot").css("top", "#{point[1] * window.innerHeight}px")
+
+			if data.position
+				pos = data.position[0].split(',')
+				personX = (parseFloat(pos[0]) + parseFloat(pos[1]) + parseFloat(pos[2])) /3
+				personWidth = parseFloat(pos[2]) - parseFloat(pos[0])
+				if personWidth > 0.66 then clearAllCards()
+
 		else
 			addCard(data.row, data.velocity, data.angle)
 
@@ -52,7 +62,7 @@ addCard = (card, velocity, angle) ->
 	cards[card.id] = card
 	$("body").append card.dom
 
-	setTimeout (()-> centerCard(card)), 1
+	setTimeout (()-> centerCard(card, personX * window.innerWidth)), 1
 	setTimeout (()-> transitionInCard(card)), 2
 
 # Center a card around a point
@@ -75,6 +85,36 @@ transitionInCard = (card) ->
 		"left": "#{nLeft}px"
 		"top": "#{nTop}px"
 	}, 1200, "easeOutExpo"
+
+# Clear all cards
+isClearing = false
+clearAllCards = () ->
+	if isClearing then return
+	isClearing = true
+
+	for key,card of cards
+		console.log card
+		nLeft = parseInt card.dom.css "left"
+		nTop = parseInt card.dom.css "top"
+
+		cLeft = nLeft + card.dom.width()/2 - window.innerWidth/2
+		cTop = nTop + card.dom.height()/2 - window.innerHeight/2
+		angle = Math.atan2(cLeft, cTop)
+
+		card.dom.transition {
+			"opacity": 0.0
+			"left": "#{nLeft + Math.cos(angle) * window.innerWidth/2}px"
+			"top": "#{nTop + Math.sin(angle) * window.innerWidth/2}px"
+		}, 400, "easeInQuad"
+
+	setTimeout(deleteAllCards, 400)
+window.clearAllCards = clearAllCards.bind(this);
+
+deleteAllCards = () ->
+	$(".card").remove()
+	cards = {}
+	isClearing = false
+
 
 # Keaton's magical HTML templating
 applyTemplate = (templateName, data, returnElement = true) ->

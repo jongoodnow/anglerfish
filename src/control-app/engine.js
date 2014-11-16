@@ -140,7 +140,8 @@
     if (initialBeta === void 0) {
       initialBeta = event.gamma + 180;
     }
-    return beta = event.gamma + 180;
+    beta = event.gamma + 180;
+    return console.log(beta, initialBeta);
   });
 
   sendCard = function(card, velocity, isRight) {

@@ -30,6 +30,20 @@ html,body {
 }
 .title {left: 10px;}
 .time {right: 10px; display: none;}
+.line {
+	height: 100%;
+	width: 4px;
+	background-color: white;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+}
+#slline {
+	background-color: blue;
+}
+#srline {
+	background-color: green;
+}
 
 #pointerDot {
 	width: 10px;

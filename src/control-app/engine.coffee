@@ -108,6 +108,7 @@ beta = 0
 window.addEventListener 'deviceorientation', (event) ->
 	if initialBeta is undefined then initialBeta = event.gamma + 180
 	beta = event.gamma + 180
+	console.log beta, initialBeta
 
 # API back to the server
 sendCard = (card, velocity, isRight) ->

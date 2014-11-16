@@ -1,7 +1,11 @@
 (function() {
-  var addCard, applyTemplate, cards, centerCard, startUI, transitionInCard, updateBar, updateTime, velocityScale;
+  var addCard, applyTemplate, cards, centerCard, clearAllCards, deleteAllCards, isClearing, personWidth, personX, startUI, transitionInCard, updateBar, updateTime, velocityScale;
 
   cards = {};
+
+  personX = 0.5;
+
+  personWidth = 0;
 
   $(function() {
     var ws;
@@ -11,7 +15,7 @@
       return ws.send("Connecting to Anglerfish Central Command");
     };
     return ws.onmessage = function(evt) {
-      var data, point;
+      var data, point, pos;
       data = JSON.parse(evt.data);
       if (data.connected) {
         return $(".time").css("display", "block");
@@ -20,7 +24,15 @@
         point[0] = Math.max(Math.min(parseFloat(point[0]), 1), 0);
         point[1] = Math.max(Math.min(parseFloat(point[1]), 1), 0);
         $("#pointerDot").css("left", "" + (point[0] * window.innerWidth) + "px");
-        return $("#pointerDot").css("top", "" + (point[1] * window.innerHeight) + "px");
+        $("#pointerDot").css("top", "" + (point[1] * window.innerHeight) + "px");
+        if (data.position) {
+          pos = data.position[0].split(',');
+          personX = (parseFloat(pos[0]) + parseFloat(pos[1]) + parseFloat(pos[2])) / 3;
+          personWidth = parseFloat(pos[2]) - parseFloat(pos[0]);
+          if (personWidth > 0.66) {
+            return clearAllCards();
+          }
+        }
       } else {
         return addCard(data.row, data.velocity, data.angle);
       }
@@ -60,7 +72,7 @@
     cards[card.id] = card;
     $("body").append(card.dom);
     setTimeout((function() {
-      return centerCard(card);
+      return centerCard(card, personX * window.innerWidth);
     }), 1);
     return setTimeout((function() {
       return transitionInCard(card);
@@ -93,6 +105,39 @@
       "left": "" + nLeft + "px",
       "top": "" + nTop + "px"
     }, 1200, "easeOutExpo");
+  };
+
+  isClearing = false;
+
+  clearAllCards = function() {
+    var angle, cLeft, cTop, card, key, nLeft, nTop;
+    if (isClearing) {
+      return;
+    }
+    isClearing = true;
+    for (key in cards) {
+      card = cards[key];
+      console.log(card);
+      nLeft = parseInt(card.dom.css("left"));
+      nTop = parseInt(card.dom.css("top"));
+      cLeft = nLeft + card.dom.width() / 2 - window.innerWidth / 2;
+      cTop = nTop + card.dom.height() / 2 - window.innerHeight / 2;
+      angle = Math.atan2(cLeft, cTop);
+      card.dom.transition({
+        "opacity": 0.0,
+        "left": "" + (nLeft + Math.cos(angle) * window.innerWidth / 2) + "px",
+        "top": "" + (nTop + Math.sin(angle) * window.innerWidth / 2) + "px"
+      }, 400, "easeInQuad");
+    }
+    return setTimeout(deleteAllCards, 400);
+  };
+
+  window.clearAllCards = clearAllCards.bind(this);
+
+  deleteAllCards = function() {
+    $(".card").remove();
+    cards = {};
+    return isClearing = false;
   };
 
   applyTemplate = function(templateName, data, returnElement) {
