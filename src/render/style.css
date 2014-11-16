@@ -8,14 +8,37 @@ html,body {
 	font-family: "Raleway";
 }
 
-.time {
+#bar {
 	position: absolute;
-	bottom: 10px;
-	left: 10px;
+	bottom: 16px;
+	left: 0px;
+	width: 100%;
+	right: 0px;
+	height: 20px;
+	background-image: url('./bar.png');
+	opacity: 0.3;
+}
+
+.time, .title {
+	position: absolute;
+	bottom: 0px;
 	color: #9aa;
 	font-weight: lighter;
 	font-size: 40pt;
-	display: none;
+	background-color: black;
+	padding: 0px 10px;
+}
+.title {left: 10px;}
+.time {right: 10px; display: none;}
+
+#pointerDot {
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 7px #fa4;
+	position: absolute;
+	background-color: #f44;
+	z-index: 99;
 }
 
 .template {display: none;}
@@ -24,13 +47,42 @@ html,body {
 	opacity: 0;
 	display: inline-block;
 	position: absolute;
-	background-color: white;
-	padding: 3px;
-	border: 1px solid #ddd;
-	border-radius: 3px;
 	overflow: hidden;
+	z-index: 1;
 }
 
 .card * {
 	max-height: 400px;
+	max-width: 500px;
+}
+
+.card.picture {
+	background-color: white;
+	padding: 3px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+.card.picture label, .card.question .asker {
+	text-align: center;
+	color: #666;
+	padding: 4px 0px;
+	margin: 0 auto;
+	display: block;
+}
+
+.card.question .asker {color: #444;}
+
+.card.question {
+	background-color: rgba(255,255,255,0.75);
+	padding: 3px 7px;
+	border: 1px dashed white;
+	border-radius: 3px;
+	max-width: 350px;
+}
+
+.card.question .message {
+	font-size: 14pt;
+	color: black;
+	text-align: center;
 }

@@ -1,5 +1,5 @@
 (function() {
-  var addCard, applyTemplate, cards, centerCard, startUI, transitionInCard, updateTime, velocityScale;
+  var addCard, applyTemplate, cards, centerCard, startUI, transitionInCard, updateBar, updateTime, velocityScale;
 
   cards = {};
 
@@ -11,10 +11,14 @@
       return ws.send("Connecting to Anglerfish Central Command");
     };
     return ws.onmessage = function(evt) {
-      var data;
+      var data, point;
       data = JSON.parse(evt.data);
       if (data.connected) {
         return $(".time").css("display", "block");
+      } else if (data.pointer) {
+        point = data.pointer[0].split(',');
+        $("#pointerDot").css("right", "" + (parseFloat(point[0]) * window.innerWidth) + "px");
+        return $("#pointerDot").css("top", "" + (parseFloat(point[1]) * window.innerHeight) + "px");
       } else {
         return addCard(data.row, data.velocity, data.angle);
       }
@@ -22,7 +26,9 @@
   });
 
   startUI = function() {
-    return setInterval(updateTime, 500);
+    setInterval(updateTime, 500);
+    setInterval(updateBar, 100000);
+    return updateBar();
   };
 
   updateTime = function() {
@@ -35,6 +41,13 @@
     a = new Date().getHours() > 12 ? "PM" : "AM";
     div = $(".time");
     return div.html("" + h + ":" + m + " " + a);
+  };
+
+  updateBar = function() {
+    $("#bar").css('backgroundPosition', "0px 0px");
+    return $("#bar").transition({
+      'backgroundPosition': "2000px 0px"
+    }, 100000, "linear");
   };
 
   addCard = function(card, velocity, angle) {
@@ -65,7 +78,7 @@
     return card.dom.css("top", "" + (y - ch / 2) + "px");
   };
 
-  velocityScale = 175;
+  velocityScale = 200;
 
   transitionInCard = function(card) {
     var dx, dy, nLeft, nTop;

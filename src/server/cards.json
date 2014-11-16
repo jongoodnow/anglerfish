@@ -1,27 +1,27 @@
 [
 	{
 		"id": "xc0oflp",
-		"name": "Troy Picture",
+		"name": "Welcome to Troy",
 		"type": "picture",
 		"src": "/static/troy.png"
 	},
 	{
 		"id": "xc0of5lp",
-		"name": "Troy Picture",
+		"name": "Mm, Pasta",
 		"type": "picture",
-		"src": "/static/troy.png"
+		"src": "/static/dinner.jpg"
 	},
 	{
 		"id": "xc0ofl3",
-		"name": "Troy Picture",
+		"name": "Up all Night",
 		"type": "picture",
-		"src": "/static/troy.png"
+		"src": "/static/hack.jpg"
 	},
 	{
 		"id": "xc02flp",
-		"name": "Troy Picture",
+		"name": "First Snow",
 		"type": "picture",
-		"src": "/static/troy.png"
+		"src": "/static/road.jpg"
 	},
 	{
 		"id": "rp5v1go",

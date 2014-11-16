@@ -13,12 +13,18 @@ $ ()->
 		data = JSON.parse evt.data
 		if data.connected 
 			$(".time").css("display","block")
+		else if data.pointer
+			point = data.pointer[0].split(',')
+			$("#pointerDot").css("right", "#{parseFloat(point[0]) * window.innerWidth}px")
+			$("#pointerDot").css("top", "#{parseFloat(point[1]) * window.innerHeight}px")
 		else
 			addCard(data.row, data.velocity, data.angle)
 
 # Clock
 startUI = () ->
 	setInterval updateTime, 500
+	setInterval updateBar, 100000
+	updateBar()
 
 updateTime = () ->
 	h = "" + (new Date().getHours() % 12) || 12
@@ -28,6 +34,11 @@ updateTime = () ->
 	a = if new Date().getHours() > 12 then "PM" else "AM"
 	div = $ ".time"
 	div.html "#{h}:#{m} #{a}"
+
+# Bar
+updateBar = () ->
+	$("#bar").css('backgroundPosition', "0px 0px");
+	$("#bar").transition({'backgroundPosition': "2000px 0px"}, 100000, "linear");
 
 # Add a module
 addCard = (card, velocity, angle) ->
@@ -49,7 +60,7 @@ centerCard = (card, x = window.innerWidth/2, y = window.innerHeight/2) ->
 	card.dom.css "top", "#{y - ch/2}px"
 
 # Animate a card
-velocityScale = 175
+velocityScale = 200
 transitionInCard = (card) ->
 	dx = velocityScale * card.velocity * Math.cos card.angle
 	dy = velocityScale * card.velocity * Math.sin card.angle

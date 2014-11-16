@@ -9,13 +9,20 @@
 	<script src="./engine.js"></script>
 </head>
 <body>
+	<div id="bar"></div>
+	<div class="title">Keaton &amp; Jon's Presentation</div>
 	<div class="time"></div>
+	<div id="pointerDot"></div>
 
 	<!-- Card templates -->
 	<div class="template" id="card-template">
 		<div class="card $type" data-id="$id">$content</div>
 	</div>
-	<div class="template" id="content-picture"><img src="$src"></div>
+	<div class="template" id="content-picture"><img src="$src"><label>$name</label></div>
+	<div class="template" id="content-question">
+		<p class="message">$message</p>
+		<p class="asker">-$sender</p>
+	</div>
 
 </body>
 </html>
