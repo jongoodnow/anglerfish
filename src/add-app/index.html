@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Contribute to the presentation</title>
+	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+<body>
+	<h2>Contribute to the Presentation</h2>
+	<form action="../add" method="POST" enctype="multipart/form-data">
+		<table>
+		<tr>
+			<td>Title</td>
+			<td><input type="text" name="name"/></td>
+		</tr>
+		<tr>
+			<td>Type</td>
+			<td><select type="text" name="type" id="nameSelect">
+				<option value="question">Ask Question</option>
+				<option value="question">Make Comment</option>
+				<option value="picture">Upload Picture</option>
+				<option value="video">Video Link</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td>Add Image</td>
+			<td><input type="file" name="image"/></td>
+		</tr>
+		<tr>
+			<td>Message/Link</td>
+			<td><textarea name="message"></textarea></td>
+		</tr>
+		<tr>
+			<td>Your Name</td>
+			<td><input type="text" name="sender"/></td>
+		</tr>
+		</table>
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>
