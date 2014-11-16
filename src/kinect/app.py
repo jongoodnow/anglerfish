@@ -77,6 +77,19 @@ def main():
         d3 = d3.astype(np.uint8)
         depths_per_x = d3.mean(axis=0) - bg_depth
         depths_per_x = np.array([i if i < -3.5 else 0 for i in depths_per_x])
+        minimum = np.amin(depths_per_x)
+        if minimum != 0:
+            spanleft = None
+            spanright = None
+            body = None
+            for pos, i in enumerate(depths_per_x):
+                if spanleft is None:
+                    if i < 0:
+                        spanleft = pos
+                if i < 0:
+                    spanright = pos
+                if i == minimum:
+                    body = pos
         plt.clf()
         plt.scatter(np.arange(depths_per_x.size), depths_per_x)
         plt.ylim([-255, 0])
