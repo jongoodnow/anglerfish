@@ -47,31 +47,39 @@ def get_bg_depth():
     mtx = np.matrix(corners)
     mean = mtx.mean(0)
     middle_coords = (int(mean.item((0, 0))), int(mean.item((0, 1))))
+    corners_arr = np.array(corners)
+    lower_bound = np.amin(corners_arr, axis=0)
+    upper_bound = np.amax(corners_arr, axis=0)
     global depth
     (depth,_) = get_depth()
-    d3 = np.dstack((depth, depth, depth)).astype(np.uint8)
-    return d3[middle_coords[0]][middle_coords[1]][0]
+    #d3 = np.dstack((depth, depth, depth)).astype(np.uint8)
+    d3 = np.array(depth)
+    d3 = np.array([y[lower_bound[0]:upper_bound[0]] 
+        for y in d3[lower_bound[1]:upper_bound[1]]])
+    mean_vertical = d3.mean(axis=0)
+    return mean_vertical.mean(axis=0).astype(np.uint8)
 
 
 def main():
     import matplotlib.pyplot as plt
     bg_depth = get_bg_depth()
+    print bg_depth
     plt.ion()
     plt.show()
+    corners_arr = np.array(corners)
+    lower_bound = np.amin(corners_arr, axis=0)
+    upper_bound = np.amax(corners_arr, axis=0)
     while True:
         (depth,_) = get_depth()
-        d3 = np.array(depth) #np.dstack((depth, depth, depth)).astype(np.uint8)
-        corners_arr = np.array(corners)
-        lower_bound = np.amin(corners_arr, axis=0)
-        upper_bound = np.amax(corners_arr, axis=1)
-        d3 = d3[lower_bound[0]:upper_bound[0], lower_bound[1]:upper_bound[1]]
-        #fixed_depth = np.subtract(d3[:][:, 0], bg_depth)
-        depths_per_x = d3.mean(axis=0)
-        #cv.ShowImage('both',cv.fromarray(d3))
-        #cv.WaitKey(5)
-        #depth_hist = np.histogram(fixed_depth, bins=np.arange(320))
+        d3 = np.array(depth)
+        d3 = np.array([y[lower_bound[0]:upper_bound[0]] 
+            for y in d3[lower_bound[1]:upper_bound[1]]])
+        d3 = d3.astype(np.uint8)
+        depths_per_x = d3.mean(axis=0) - bg_depth
+        depths_per_x = np.array([i if i < -3.5 else 0 for i in depths_per_x])
         plt.clf()
-        plt.plot(np.arange(depths_per_x.size), depths_per_x)
+        plt.scatter(np.arange(depths_per_x.size), depths_per_x)
+        plt.ylim([-255, 0])
         plt.draw()
     
 
