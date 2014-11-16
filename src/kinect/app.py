@@ -60,6 +60,18 @@ def get_bg_depth():
     return mean_vertical.mean(axis=0).astype(np.uint8)
 
 
+def yposition(x):
+    d3 = np.array(depth)
+    column = d3[x].astype(np.uint8)
+    ypos = None
+    mindepth = 255
+    for pos, i in enumerate(column):
+        if i < mindepth:
+            ypos = pos
+            mindepth = i
+    return ypos
+
+
 def main():
     import matplotlib.pyplot as plt
     bg_depth = get_bg_depth()
@@ -71,9 +83,9 @@ def main():
     upper_bound = np.amax(corners_arr, axis=0)
     while True:
         (depth,_) = get_depth()
-        d3 = np.array(depth)
+        depth_array = np.array(depth)
         d3 = np.array([y[lower_bound[0]:upper_bound[0]] 
-            for y in d3[lower_bound[1]:upper_bound[1]]])
+            for y in depth_array[lower_bound[1]:upper_bound[1]]])
         d3 = d3.astype(np.uint8)
         depths_per_x = d3.mean(axis=0) - bg_depth
         depths_per_x = np.array([i if i < -3.5 else 0 for i in depths_per_x])
@@ -81,7 +93,7 @@ def main():
         if minimum != 0:
             spanleft = None
             spanright = None
-            body = None
+            bodyx = None
             for pos, i in enumerate(depths_per_x):
                 if spanleft is None:
                     if i < 0:
@@ -89,13 +101,22 @@ def main():
                 if i < 0:
                     spanright = pos
                 if i == minimum:
-                    body = pos
+                    bodyx = pos
+            lefty = yposition(spanleft)
+            righty = yposition(spanright)
+            bodyy = yposition(bodyx)
+            leftz = depth_array[spanleft][lefty]
+            rightz = depth_array[spanright][righty]
+            bodyz = depth_array[bodyx][bodyy]
+            print "left (", spanleft, lefty, leftz, ")"
+            print "right (", spanright, righty, rightz, ")"
+            print "body (", bodyx, bodyy, bodyz, ")"
+
         plt.clf()
         plt.scatter(np.arange(depths_per_x.size), depths_per_x)
         plt.ylim([-255, 0])
         plt.draw()
     
-
 
 if __name__ == '__main__':
     main()
