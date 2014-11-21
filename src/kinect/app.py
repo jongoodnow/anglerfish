@@ -7,6 +7,7 @@ import Image, ImageTk
 import time
 import urllib2
 import matplotlib.pyplot as plt
+import sys
 from scipy import stats
 
 def save_img():
@@ -75,13 +76,13 @@ def yposition(x, bg_depth):
     return 128
 
 
-def main():
+def main(ip_address):
     bg_depth_orig = get_bg_depth()
     bg_depth_unsigned = bg_depth_orig.astype(np.uint8)
     bg_depth = bg_depth_orig.astype(np.int8)
     print bg_depth
-    #plt.ion()
-    #plt.show()
+    plt.ion()
+    plt.show()
     corners_arr = np.array(corners)
     while True:
         (depth,_) = get_depth()
@@ -121,34 +122,30 @@ def main():
             if spanleft < bodyx - 25:
                 pointx, pointy, pointz = spanleft, lefty, leftz
                 urllib2.urlopen(
-                    "http://129.161.90.185:8888/update?pointer=%f,%f&position=%f,%f,%f" %(
+                    "http://%s:8888/update?pointer=%f,%f&position=%f,%f,%f" %(ip_address,
                     pointx / xxrange / 2, pointy / yrange, spanleft/xxrange, bodyx/xxrange, 
                     spanright/xxrange)).read()
             elif spanright > bodyx + 25:
                 pointx, pointy, pointz = spanright, righty, rightz
                 urllib2.urlopen(
-                    "http://129.161.90.185:8888/update?pointer=%f,%f&position=%f,%f,%f" %(
+                    "http://%s:8888/update?pointer=%f,%f&position=%f,%f,%f" %(ip_address,
                     pointx / xxrange / 2, pointy / yrange, spanleft/xxrange, 
                     bodyx/xxrange, spanright/xxrange)).read()
             else:
                 urllib2.urlopen(
-                    "http://129.161.90.185:8888/update?pointer=0,0&position=%f,%f,%f" %(
+                    "http://%s:8888/update?pointer=0,0&position=%f,%f,%f" %(ip_address,
                     spanleft/xxrange, bodyx/xxrange, spanright/xxrange)).read()
-            #xzslope = (pointz - bodyz) / (pointx - bodyx)
-            #yzslope = (pointz - bodyz) / (pointy - bodyy)
-            #zdiff = bg_depth - bodyz
-            #xdist = zdiff / xzslope
-            #ydist = zdiff / yzslope
-            #xcoord = (xdist + bodyx) / upper_bound[1]
-            #ycoord = (ydist + bodyy) / upper_bound[0]
         else:
             urllib2.urlopen(
-                "http://129.161.90.185:8888/update?pointer=0,0").read()
-        #plt.clf()
-        #plt.scatter(np.arange(depths_per_x.size), depths_per_x)
-        #plt.ylim([-255, 255])
-        #plt.draw()
+                "http://%s:8888/update?pointer=0,0" %ip_address).read()
+        plt.clf()
+        plt.scatter(np.arange(depths_per_x.size), depths_per_x)
+        plt.ylim([-255, 255])
+        plt.draw()
     
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) != 2:
+        print "Please provide the IP address of the app server as an argument."
+    else:
+        main(sys.argv[1])

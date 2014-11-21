@@ -6,9 +6,10 @@ import uuid
 import StringIO
 import random
 import string
+import os
 from PIL import Image
 
-json_data = open('cards.json').read()
+json_data = open(os.path.join(os.path.dirname(__file__), 'cards.json')).read()
 stack = json.loads(json_data)
 
 global ProjSocket

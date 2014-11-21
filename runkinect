@@ -1,0 +1,3 @@
+#! /bin/sh
+
+python src/kinect/app.py $1
