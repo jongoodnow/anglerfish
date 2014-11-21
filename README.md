@@ -3,7 +3,7 @@ anglerfish
 
 A presentation app that utilizes the Xbox Kinect to allow the speaker to interact with their presentation.
 
-A HackRPI 2014 Project Keaton Brandt and Jonathan Goodnow.
+A HackRPI 2014 Project by Keaton Brandt and Jonathan Goodnow.
 
 Setup
 -----
