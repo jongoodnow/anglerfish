@@ -31,7 +31,7 @@ Now start the server powering the Kinect with:
 
 	$ ./runkinect <IP ADDRESS>
 
-where <IP ADDRESS> is the IP of the server running the web app. When you start, you will see a picture of what your Kinect can see. Click on the four corners of your screen or projection to tell it where the projection is.
+where `<IP ADDRESS>` is the IP of the server running the web app. When you start, you will see a picture of what your Kinect can see. Click on the four corners of your screen or projection to tell it where the projection is.
 
 Visit the app on a mobile phone at the IP stated in the console, and visit the presentation page on a large screen or projector. Put the Kinect near the projector so that it faces you.
 
